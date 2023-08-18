@@ -1,0 +1,9 @@
+on: 
+  pull_request: 
+    types: 
+      - opened 
+jobs: 
+  pr_opened: 
+    runs-on: ubuntu-latest 
+    steps: 
+      - run: echo 'A new pull was request created.' 
