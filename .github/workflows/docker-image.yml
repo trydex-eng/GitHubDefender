@@ -11,12 +11,13 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: docker build . --file myNodejsContainer/Dockerfile --tag my-image-name:$(date +%s)
+      run: docker build . --file myNodejsContainer/Dockerfile --tag my-image-name
 
     - name: Run Microsoft DevOps Security
       uses: microsoft/security-devops-action@preview
       env:
         TRIVY_ACTION: 'image'
+        TRIVY_TARGET: 'my-image-name'
       id: msdo
       with:
         tools: 'trivy'
