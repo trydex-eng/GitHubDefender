@@ -1,0 +1,11 @@
+{
+  "name": "mynodejspackage",
+  "version": "1.0.0",
+  "description": "my test nodjs docker container",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ayala Miller",
+  "license": "ISC"
+}
