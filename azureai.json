@@ -1,0 +1,101 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "accounts_mdc_openai_resource_name": {
+            "defaultValue": "mdc-openai-resource",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.CognitiveServices/accounts",
+            "apiVersion": "2023-10-01-preview",
+            "name": "[parameters('accounts_mdc_openai_resource_name')]",
+            "location": "eastus",
+            "sku": {
+                "name": "S0"
+            },
+            "kind": "OpenAI",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "customSubDomainName": "[parameters('accounts_mdc_openai_resource_name')]",
+                "networkAcls": {
+                    "defaultAction": "Allow",
+                    "virtualNetworkRules": [],
+                    "ipRules": []
+                },
+                "publicNetworkAccess": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts/deployments",
+            "apiVersion": "2023-10-01-preview",
+            "name": "[concat(parameters('accounts_mdc_openai_resource_name'), '/demogpt35deployment')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_mdc_openai_resource_name'))]"
+            ],
+            "sku": {
+                "name": "Standard",
+                "capacity": 120
+            },
+            "properties": {
+                "model": {
+                    "format": "OpenAI",
+                    "name": "gpt-35-turbo-16k",
+                    "version": "0613"
+                },
+                "versionUpgradeOption": "OnceNewDefaultVersionAvailable",
+                "currentCapacity": 120,
+                "raiPolicyName": "Security"
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts/deployments",
+            "apiVersion": "2023-10-01-preview",
+            "name": "[concat(parameters('accounts_mdc_openai_resource_name'), '/gpt-35-turbo-deployment')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_mdc_openai_resource_name'))]"
+            ],
+            "sku": {
+                "name": "Standard",
+                "capacity": 10
+            },
+            "properties": {
+                "model": {
+                    "format": "OpenAI",
+                    "name": "gpt-35-turbo",
+                    "version": "0613"
+                },
+                "versionUpgradeOption": "OnceNewDefaultVersionAvailable",
+                "currentCapacity": 10,
+                "raiPolicyName": "Security"
+            }
+        },
+        {
+            "type": "Microsoft.CognitiveServices/accounts/deployments",
+            "apiVersion": "2023-10-01-preview",
+            "name": "[concat(parameters('accounts_mdc_openai_resource_name'), '/text-embedding-ada-002-deployment')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.CognitiveServices/accounts', parameters('accounts_mdc_openai_resource_name'))]"
+            ],
+            "sku": {
+                "name": "Standard",
+                "capacity": 1
+            },
+            "properties": {
+                "model": {
+                    "format": "OpenAI",
+                    "name": "text-embedding-ada-002",
+                    "version": "2"
+                },
+                "versionUpgradeOption": "OnceNewDefaultVersionAvailable",
+                "currentCapacity": 1,
+                "raiPolicyName": "Security"
+            }
+        }
+    ]
+}
